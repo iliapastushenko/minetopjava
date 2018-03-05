@@ -31,9 +31,13 @@
 
 <h2>Meals</h2>
 
+
+<h3><a href="adding.jsp">Adding</a></h3>
+
 <c:if test="${!empty currentMeals}">
     <table align="center" class="tg">
         <tr>
+            <th width="80">ID</th>
             <th width="80">dateTime</th>
             <th width="120">description</th>
             <th width="120">calories</th>
@@ -41,6 +45,7 @@
         </tr>
         <c:forEach items="${currentMeals}" var="meal">
             <tr class="${meal.exceed  == true ? "exceeded" : "notexceeded"}">
+                <td>${meal.id}</td>
                 <td>${fn:replace(meal.dateTime, 'T', ' ')}</td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>

@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
+import ru.javawebinar.topjava.dao.dao;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -14,12 +15,15 @@ import java.time.LocalTime;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
+
+    private dao storage = dao.getInstance();
+
     private static final Logger log = getLogger(MealServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to meals");
-        request.setAttribute("currentMeals", MealsUtil.getFilteredWithExceeded(MealsUtil.meals, LocalTime.of(0, 0), LocalTime.of(23, 0), 2000));
+        request.setAttribute("currentMeals", MealsUtil.getFilteredWithExceeded(storage.getAllMeal(), LocalTime.of(0, 0), LocalTime.of(23, 0), 2000));
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 
