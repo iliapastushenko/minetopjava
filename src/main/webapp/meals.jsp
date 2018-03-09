@@ -32,7 +32,7 @@
 <h2>Meals</h2>
 
 
-<h3><a href="adding.jsp">Adding</a></h3>
+<h3><a href="Meal.jsp">Add a meal</a></h3>
 
 <c:if test="${!empty currentMeals}">
     <table align="center" class="tg">
@@ -42,6 +42,7 @@
             <th width="120">description</th>
             <th width="120">calories</th>
             <th width="120">exceed</th>
+            <th width="120">Actions</th>
         </tr>
         <c:forEach items="${currentMeals}" var="meal">
             <tr class="${meal.exceed  == true ? "exceeded" : "notexceeded"}">
@@ -50,6 +51,8 @@
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
                 <td>${meal.exceed}</td>
+                <td><a href="meals?action=edit&mealId=<c:out value="${meal.id}"/>">Update</a><br/>
+                    <a href="meals?action=delete&mealId=<c:out value="${meal.id}"/>">Delete</a></td>
             </tr>
         </c:forEach>
     </table>

@@ -9,36 +9,34 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class dao implements daoint {
+public class Dao implements daoint {
 
     private Map<Integer, Meal> storage = new ConcurrentHashMap<>();
 
     private AtomicInteger count = new AtomicInteger(0);
 
-    private static dao instance;
-
-    public static dao getInstance() {
-        if (instance == null) {
-            instance = new dao();
-
-            for (Meal meal : MealsUtil.firstinit())
-
-            {
-
-                instance.addMeal(meal);
-            }
-        }
-        return instance;
-    }
-
     @Override
-    public void addMeal(Meal meal) {
+    public Meal addMeal(Meal meal) {
         if (storage.containsKey(meal.getId())) {
             storage.put(meal.getId(), meal);
         } else {
             meal.setId(generateId());
             storage.put(meal.getId(), meal);
         }
+
+        return meal;
+    }
+
+    public void init() {
+
+        for (Meal meal : MealsUtil.firstinit())
+
+        {
+
+            addMeal(meal);
+        }
+
+
     }
 
     @Override
@@ -58,12 +56,11 @@ public class dao implements daoint {
 
     @Override
     public List<Meal> getAllMeal() {
-        List<Meal> meal = new ArrayList<>(storage.values());
-        return meal;
+        return new ArrayList<>(storage.values());
     }
 
-    @Override
-    public int generateId() {
+
+    private int generateId() {
         return count.incrementAndGet();
     }
 }

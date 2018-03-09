@@ -26,8 +26,6 @@ public class Meal {
 
     }
 
-
-
     public Meal(LocalDateTime dateTime, String description, int calories, int id) {
         this.id = id;
         this.dateTime = dateTime;

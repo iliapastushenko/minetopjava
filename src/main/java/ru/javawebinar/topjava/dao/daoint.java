@@ -8,20 +8,19 @@ import java.util.List;
 public interface daoint {
 
 
-    public void addMeal(Meal m);
+    Meal addMeal(Meal m);
 
 
-    public void updateMeal(int id, Meal m);
+    void updateMeal(int id, Meal m);
 
 
-    public Meal getMeal(int id);
+    Meal getMeal(int id);
 
 
-    public void deleteMeal(int id);
+    void deleteMeal(int id);
 
 
-    public List<Meal> getAllMeal();
+    List<Meal> getAllMeal();
 
 
-        public  int generateId();
 }
