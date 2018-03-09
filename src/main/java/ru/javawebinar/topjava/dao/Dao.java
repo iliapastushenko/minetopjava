@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Dao implements daoint {
+public class Dao implements DaoInt {
 
     private Map<Integer, Meal> storage = new ConcurrentHashMap<>();
 

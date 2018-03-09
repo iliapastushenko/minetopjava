@@ -5,7 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 import java.util.Collection;
 import java.util.List;
 
-public interface daoint {
+public interface DaoInt {
 
 
     Meal addMeal(Meal m);
