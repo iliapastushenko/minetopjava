@@ -60,23 +60,21 @@ public class MealServlet extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8");
 
-        String mealid = req.getParameter("mealid");
+        String mealId = req.getParameter("mealid");
         String description = req.getParameter("description");
         String calories = req.getParameter("calories");
         String dateTime = req.getParameter("dateTime");
 
-        if (mealid == null || mealid.isEmpty()) {
+        if (mealId == null || mealId.isEmpty()) {
 
             dao.addMeal(new Meal(LocalDateTime.parse(dateTime),
                     description, Integer.valueOf(calories)));
-            req.setCharacterEncoding("UTF-8");
             req.setAttribute("currentMeals", MealsUtil.getFilteredWithExceeded(dao.getAllMeal(), LocalTime.of(0, 0), LocalTime.of(23, 0), 2000));
             req.getRequestDispatcher("/meals.jsp").forward(req, resp);
         } else {
-            //2015-03-30T10:00
 
-            dao.updateMeal(Integer.valueOf(mealid), new Meal(LocalDateTime.parse(dateTime),
-                    description, Integer.valueOf(calories), Integer.valueOf(mealid)));
+            dao.updateMeal(Integer.valueOf(mealId), new Meal(LocalDateTime.parse(dateTime),
+                    description, Integer.valueOf(calories), Integer.valueOf(mealId)));
             req.setAttribute("currentMeals", MealsUtil.getFilteredWithExceeded(dao.getAllMeal(), LocalTime.of(0, 0), LocalTime.of(23, 0), 2000));
             req.getRequestDispatcher("/meals.jsp").forward(req, resp);
 
