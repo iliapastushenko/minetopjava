@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.repository.mock;
 
+import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
@@ -7,21 +9,31 @@ import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Repository
 public class InMemoryMealRepositoryImpl implements MealRepository {
 
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
 
     private AtomicInteger counter = new AtomicInteger(0);
 
-//    {
-//        MealsUtil.MEALS.forEach(this::save);
-//    }
+    {
 
+
+        for (Meal meal : MealsUtil.MEALS)
+
+        {
+
+            this.save(meal, AuthorizedUser.id());
+        }
+
+    }
 
 
     @Override
@@ -45,20 +57,20 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void delete(int mealID, int userID) {
+    public boolean delete(int mealID, int userID) {
 
-        repository.entrySet().removeIf(entry -> entry.getKey() == mealID && entry.getValue().getUserId() == userID);
+        return repository.entrySet().removeIf(entry -> entry.getKey() == mealID && entry.getValue().getUserId() == userID);
 
     }
 
 
     @Override
-    public Collection<Meal> getAll(int userID, LocalDate startDate, LocalDate endDate) {
+    public List<Meal> getAll(int userID, LocalDate startDate, LocalDate endDate) {
+
         return repository.entrySet().
                 stream().filter(e -> e.getValue().getUserId() == userID)
-                .filter(e -> DateTimeUtil.DateisBetween(e.getValue().getDate(), startDate, endDate))
-                .sorted().
-                        map(Map.Entry::getValue).
+                .filter(e -> DateTimeUtil.isBetweenDate(e.getValue().getDate(), startDate, endDate)).
+                        map(Map.Entry::getValue).sorted(Comparator.comparing(Meal::getDateTime)).
                         collect(Collectors.toList());
     }
 }

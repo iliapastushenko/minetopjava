@@ -5,13 +5,14 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.List;
 
 public interface MealRepository {
     Meal save(Meal meal, int userID);
 
-    void delete(int id,int userID);
+    boolean delete(int id,int userID);
 
     Meal get(int mealID, int userID);
 
-    Collection<Meal> getAll(int userID, LocalDate startTime, LocalDate endTime);
+    List<Meal> getAll(int userID, LocalDate startTime, LocalDate endTime);
 }
