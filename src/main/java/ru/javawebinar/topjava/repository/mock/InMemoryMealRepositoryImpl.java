@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -81,6 +82,16 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         return repository.entrySet().
                 stream().filter(e -> e.getValue().getUserId() == userID)
                 .map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
+                        collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Meal> getAll(int userID, LocalTime startTime, LocalTime endTime) {
+
+        return repository.entrySet().
+                stream().filter(e -> e.getValue().getUserId() == userID)
+                .filter(e -> DateTimeUtil.isBetween(e.getValue().getTime(), startTime, endTime)).
+                        map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
                         collect(Collectors.toList());
     }
 }

@@ -71,27 +71,32 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
-               String startdate =  request.getParameter("startdate");
-                String enddate =  request.getParameter("enddate");
+                String startdate = request.getParameter("startdate");
+                String enddate = request.getParameter("enddate");
 
-                String starttime=  request.getParameter("starttime");
-                String endtime =  request.getParameter("endtime");
+                String starttime = request.getParameter("starttime");
+                String endtime = request.getParameter("endtime");
 
                 log.info("getAll");
-                if(startdate!=null&&enddate!=null) {
-                request.setAttribute("meals",
-                        MealsUtil.getWithExceeded(repository.getAll(AuthorizedUser.id(),
-                                LocalDate.MIN, LocalDate.MAX),
-                                MealsUtil.DEFAULT_CALORIES_PER_DAY));
-                request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                break; }
-                else    if(starttime!=null&&endtime!=null) {
+                if (startdate != null && enddate != null) {
                     request.setAttribute("meals",
                             MealsUtil.getWithExceeded(repository.getAll(AuthorizedUser.id(),
-                                    LocalDate.MIN, LocalDate.MAX),
+                                    LocalDate.parse(startdate), LocalDate.parse(enddate)),
                                     MealsUtil.DEFAULT_CALORIES_PER_DAY));
                     request.getRequestDispatcher("/meals.jsp").forward(request, response);
                     break;
+                } else if (starttime != null && endtime != null) {
+                    request.setAttribute("meals",
+                            MealsUtil.getWithExceeded(repository.getAll(AuthorizedUser.id(),
+                                    LocalTime.parse(starttime), LocalTime.parse(endtime)),
+                                    MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                    break;
+                } else {request.setAttribute("meals",
+                        MealsUtil.getWithExceeded(repository.getAll(AuthorizedUser.id()),
+                                MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                break;
                 }
         }
     }

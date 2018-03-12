@@ -29,7 +29,7 @@ a<%@ page contentType="text/html;charset=UTF-8" language="java" %>
     </form>
 
 
-    <form method="post" action="meals">
+    <form method="get" action="meals">
 
         <dl>
             <dt>StartDate:</dt>
@@ -46,7 +46,7 @@ a<%@ page contentType="text/html;charset=UTF-8" language="java" %>
     </form>
 
 
-    <form method="post" action="meals">
+    <form method="get" action="meals">
 
         <dl>
             <dt>Start Time:</dt>
@@ -61,6 +61,9 @@ a<%@ page contentType="text/html;charset=UTF-8" language="java" %>
         <button type="submit">Filter by time</button>
 
     </form>
+
+
+    <a href="meals">Refresh filters</a>
 
 
     <table border="1" cellpadding="8" cellspacing="0">
