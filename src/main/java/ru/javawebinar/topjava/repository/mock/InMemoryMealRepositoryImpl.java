@@ -27,7 +27,6 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         for (Meal meal : MealsUtil.MEALS)
 
         {
-
             this.save(meal, AuthorizedUser.id());
         }
 
@@ -46,9 +45,13 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     public Meal save(Meal meal, int userID) {
         if (
                 meal.isNew()) {
+
             meal.setId(counter.incrementAndGet());
-            meal.setUserId(userID);
+
+            if (meal.getUserId() == null) meal.setUserId(userID);
+
             repository.put(meal.getId(), meal);
+
             return meal;
         }
         // treat case: update, but absent in storage
@@ -65,6 +68,14 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     }
 
+    @Override
+    public List<Meal> getAll(int userID) {
+        return repository.entrySet().
+                stream().filter(e -> e.getValue().getUserId() == userID)
+                .map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
+                        collect(Collectors.toList());
+    }
+
 
     @Override
     public List<Meal> getAll(int userID, LocalDate startDate, LocalDate endDate) {
@@ -73,15 +84,6 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
                 stream().filter(e -> e.getValue().getUserId() == userID)
                 .filter(e -> DateTimeUtil.isBetweenDate(e.getValue().getDate(), startDate, endDate)).
                         map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
-                        collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Meal> getAll(int userID) {
-
-        return repository.entrySet().
-                stream().filter(e -> e.getValue().getUserId() == userID)
-                .map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
                         collect(Collectors.toList());
     }
 

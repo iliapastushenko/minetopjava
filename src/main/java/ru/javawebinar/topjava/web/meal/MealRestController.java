@@ -3,26 +3,37 @@ package ru.javawebinar.topjava.web.meal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.service.MealServiceImpl;
 import ru.javawebinar.topjava.util.ValidationUtil;
 
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 
 @Controller
-public  class MealRestController {
+public class MealRestController {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
+
 
     @Autowired
     private MealService service;
 
 
-    public List<Meal> getAll(int userID, LocalDate startTime, LocalDate endTime) {
+    public List<Meal> getAll(int userID, LocalDate startDate, LocalDate endDate) {
+        log.info("getAll");
+        return service.getAll(userID, startDate, endDate);
+    }
+
+    public List<Meal> getAll(int userID, LocalTime startTime, LocalTime endTime) {
         log.info("getAll");
         return service.getAll(userID, startTime, endTime);
     }
