@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+a<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
@@ -22,6 +23,46 @@
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <hr/>
+
+    <form class="form-horizontal" id="filter">
+
+    </form>
+
+
+    <form method="post" action="meals">
+
+        <dl>
+            <dt>StartDate:</dt>
+            <dd><input type="date" name="startdate" required></dd>
+        </dl>
+
+        <dl>
+            <dt>EndDate:</dt>
+            <dd><input type="date" name="enddate" required></dd>
+        </dl>
+
+        <button type="submit">Filter by dates</button>
+
+    </form>
+
+
+    <form method="post" action="meals">
+
+        <dl>
+            <dt>Start Time:</dt>
+            <dd><input type="time" name="starttime" required></dd>
+        </dl>
+
+        <dl>
+            <dt>End Time:</dt>
+            <dd><input type="time" name="endtime" required></dd>
+        </dl>
+
+        <button type="submit">Filter by time</button>
+
+    </form>
+
+
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>

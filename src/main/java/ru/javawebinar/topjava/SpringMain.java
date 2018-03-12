@@ -19,27 +19,38 @@ public class SpringMain {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
 
-            MealRestController  mealRestController = appCtx.getBean(MealRestController.class);
+            MealRestController mealRestController = appCtx.getBean(MealRestController.class);
 
-            Meal meal1 = new Meal(LocalDateTime.of(2015, 3, 30,
-                    10, 0), "ТЕСТОВЫЙ ЗАВТРАК", 500);
+            Meal meal1 = new Meal(LocalDateTime.of(2011, 1, 30,
+                    10, 0), "ТЕСТОВЫЙ ЗАВТРАК 1", 500);
 
-            mealRestController.create(meal1,2);
+            Meal meal2 = new Meal(LocalDateTime.of(2014, 2, 25,
+                    10, 0), "ТЕСТОВЫЙ ЗАВТРАК 2", 500);
 
-            System.out.println("Meal1 id is " +meal1.getId());
+            Meal meal3 = new Meal(LocalDateTime.of(2012, 3, 30,
+                    10, 0), "ТЕСТОВЫЙ ЗАВТРАК 3", 500);
 
-            System.out.println(mealRestController.getAll(2, LocalDate.of(2015,3,30),
-                    LocalDate.of(2015,4,1) ));
+            Meal meal4 = new Meal(LocalDateTime.of(2016, 4, 20,
+                    10, 0), "ТЕСТОВЫЙ ЗАВТРАК 4", 500);
 
-            Meal meal2 = new Meal(LocalDateTime.of(2015, 3, 30,
+            mealRestController.create(meal1, 2);
+            mealRestController.create(meal2, 2);
+            mealRestController.create(meal3, 2);
+            mealRestController.create(meal4, 2);
+
+            System.out.println(mealRestController.getAll(2, LocalDate.of(2000, 3, 30),
+                    LocalDate.of(2020, 4, 1)));
+
+            Meal meal5 = new Meal(LocalDateTime.of(2015, 3, 30,
                     10, 0), "НОВЫЙ ТЕСТОВЫЙ ЗАВТРАК", 700);
 
-            meal2.setId(7);
+            mealRestController.update(meal5, 2, meal1.getId());
 
-            mealRestController.update(meal2,2, meal1.getId());
+            System.out.println(mealRestController.getAll(2, LocalDate.of(2015, 3, 29),
+                    LocalDate.of(2015, 4, 1)));
 
-            System.out.println(mealRestController.getAll(2, LocalDate.of(2015,3,30),
-                    LocalDate.of(2015,4,1) ));
+            System.out.println(mealRestController.get(meal3.getId(), 2));
+
 
             adminUserController.create(new User(null, "userName", "email", "password", Role.ROLE_ADMIN));
         }

@@ -8,10 +8,7 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -46,13 +43,17 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userID) {
-        if (meal.isNew()) {
+        if (
+                meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             meal.setUserId(userID);
             repository.put(meal.getId(), meal);
             return meal;
         }
         // treat case: update, but absent in storage
+
+        meal.setUserId(userID);
+
         return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
@@ -70,7 +71,16 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         return repository.entrySet().
                 stream().filter(e -> e.getValue().getUserId() == userID)
                 .filter(e -> DateTimeUtil.isBetweenDate(e.getValue().getDate(), startDate, endDate)).
-                        map(Map.Entry::getValue).sorted(Comparator.comparing(Meal::getDateTime)).
+                        map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
+                        collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Meal> getAll(int userID) {
+
+        return repository.entrySet().
+                stream().filter(e -> e.getValue().getUserId() == userID)
+                .map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
                         collect(Collectors.toList());
     }
 }

@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -20,6 +21,8 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+
+@Controller
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
@@ -68,11 +71,28 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
+               String startdate =  request.getParameter("startdate");
+                String enddate =  request.getParameter("enddate");
+
+                String starttime=  request.getParameter("starttime");
+                String endtime =  request.getParameter("endtime");
+
                 log.info("getAll");
+                if(startdate!=null&&enddate!=null) {
                 request.setAttribute("meals",
-                        MealsUtil.getWithExceeded(repository.getAll(AuthorizedUser.id(), LocalDate.MIN, LocalDate.MAX), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                        MealsUtil.getWithExceeded(repository.getAll(AuthorizedUser.id(),
+                                LocalDate.MIN, LocalDate.MAX),
+                                MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                break;
+                break; }
+                else    if(starttime!=null&&endtime!=null) {
+                    request.setAttribute("meals",
+                            MealsUtil.getWithExceeded(repository.getAll(AuthorizedUser.id(),
+                                    LocalDate.MIN, LocalDate.MAX),
+                                    MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                    break;
+                }
         }
     }
 
