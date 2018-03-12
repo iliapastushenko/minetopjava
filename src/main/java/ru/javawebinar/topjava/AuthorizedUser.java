@@ -4,10 +4,9 @@ import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
 public class AuthorizedUser {
 
-    private static int userID;
+    private static int userID=1;
 
     public static int id() {
-        if (userID == 0) return 1;
         return userID;
     }
 

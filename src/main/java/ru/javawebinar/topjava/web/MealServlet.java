@@ -46,17 +46,15 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
-
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
-
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        controller.create(meal, AuthorizedUser.id());
+        if (id.isEmpty()) controller.create(meal);
+        else controller.update(meal, meal.getId());
         response.sendRedirect("meals");
     }
 
@@ -68,46 +66,69 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 int id = getId(request);
                 log.info("Delete {}", id);
-                controller.delete(id, AuthorizedUser.id());
+                controller.delete(id);
                 response.sendRedirect("meals");
                 break;
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        controller.get(getId(request), AuthorizedUser.id());
+                        controller.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
             case "all":
             default:
+                log.info("getAllFilteredByDates");
+
                 String startdate = request.getParameter("startdate");
                 String enddate = request.getParameter("enddate");
 
                 String starttime = request.getParameter("starttime");
                 String endtime = request.getParameter("endtime");
 
-                log.info("getAll");
+                if (startdate == null && enddate == null
+                        && starttime == null && endtime == null) {
+                    request.setAttribute("meals",
+                            MealsUtil.getWithExceeded(controller.getAll(),
+                                    MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                    break;
+                }
+
                 if (startdate != null && enddate != null) {
                     request.setAttribute("meals",
-                            MealsUtil.getWithExceeded(controller.getAll(AuthorizedUser.id(),
-                                    LocalDate.parse(startdate), LocalDate.parse(enddate)),
+                            MealsUtil.getWithExceeded(controller.getAllFilteredByDates(LocalDate.parse(startdate), LocalDate.parse(enddate)),
                                     MealsUtil.DEFAULT_CALORIES_PER_DAY));
                     request.getRequestDispatcher("/meals.jsp").forward(request, response);
                     break;
-                } else if (starttime != null && endtime != null) {
-                    request.setAttribute("meals",
-                            MealsUtil.getWithExceeded(controller.getAll(AuthorizedUser.id(),
-                                    LocalTime.parse(starttime), LocalTime.parse(endtime)),
-                                    MealsUtil.DEFAULT_CALORIES_PER_DAY));
-                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                    break;
-                } else {
-                    request.setAttribute("meals",
-                            MealsUtil.getWithExceeded(controller.getAll(AuthorizedUser.id()),
-                                    MealsUtil.DEFAULT_CALORIES_PER_DAY));
-                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                    break;
+                }
+                if (starttime != null && endtime != null)
+                {
+                    if ((!starttime.isEmpty()) && (!endtime.isEmpty())) {
+                        request.setAttribute("meals",
+                                MealsUtil.getFilteredWithExceeded(
+                                        controller.getAllFilteredByDates(LocalDate.MIN, LocalDate.MAX), MealsUtil.DEFAULT_CALORIES_PER_DAY,
+                                        LocalTime.parse(starttime), LocalTime.parse(endtime)));
+                        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                        break;
+                    }
+                    if ((starttime.isEmpty()) && (!endtime.isEmpty())) {
+                        request.setAttribute("meals",
+                                MealsUtil.getFilteredWithExceeded(
+                                        controller.getAllFilteredByDates(LocalDate.MIN, LocalDate.MAX), MealsUtil.DEFAULT_CALORIES_PER_DAY,
+                                        LocalTime.MIN, LocalTime.parse(endtime)));
+                        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                        break;
+                    }
+                    if (!starttime.isEmpty()) {
+                        request.setAttribute("meals",
+                                MealsUtil.getFilteredWithExceeded(
+                                        controller.getAllFilteredByDates(LocalDate.MIN, LocalDate.MAX), MealsUtil.DEFAULT_CALORIES_PER_DAY,
+                                        LocalTime.parse(starttime), LocalTime.MAX));
+                        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                        break;
+                    }
                 }
         }
     }
@@ -116,5 +137,4 @@ public class MealServlet extends HttpServlet {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
     }
-
 }

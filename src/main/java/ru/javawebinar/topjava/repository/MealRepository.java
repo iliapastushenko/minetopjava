@@ -10,13 +10,13 @@ import java.util.List;
 public interface MealRepository {
     Meal save(Meal meal, int userID);
 
+    Meal update(Meal meal, int userID);
+
     boolean delete(int id,int userID);
 
     Meal get(int mealID, int userID);
 
-    List<Meal> getAll(int userID, LocalDate startDate, LocalDate endDate);
-
-    List<Meal> getAll(int userID, LocalTime startTime, LocalTime endTime);
+    List<Meal> getAllFilteredByDates(int userID, LocalDate startDate, LocalDate endDate);
 
     List<Meal> getAll(int userID);
 }

@@ -22,79 +22,66 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-
-
-        for (Meal meal : MealsUtil.MEALS)
-
-        {
-            this.save(meal, AuthorizedUser.id());
+        for (Meal meal : MealsUtil.MEALS) {
+            // For demonstration purposes only!
+            // I don't want to create "save" method without "userID because of laziness
+            this.save(meal, meal.getUserId());
         }
-
     }
-
 
     @Override
     public Meal get(int mealID, int userID) {
-
-        return repository.entrySet().stream().filter(e -> e.getValue().getUserId() == userID)
-                .filter(e -> e.getKey() == mealID).map(Map.Entry::getValue).findFirst().get();
+        Meal meal = repository.get(mealID);
+        if (meal.getUserId() == userID) return meal;
+        else return null;
     }
-
 
     @Override
     public Meal save(Meal meal, int userID) {
-        if (
-                meal.isNew()) {
 
-            meal.setId(counter.incrementAndGet());
-
-            if (meal.getUserId() == null) meal.setUserId(userID);
-
-            repository.put(meal.getId(), meal);
-
-            return meal;
-        }
-        // treat case: update, but absent in storage
-
+        meal.setId(counter.incrementAndGet());
         meal.setUserId(userID);
+        repository.put(meal.getId(), meal);
+        return meal;
+    }
 
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+    @Override
+    public Meal update(Meal meal, int userID) {
+
+        if (repository.get(meal.getId()).getUserId() == userID) {
+            meal.setUserId(userID);
+            return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        }
+        return null;
     }
 
     @Override
     public boolean delete(int mealID, int userID) {
-
-        return repository.entrySet().removeIf(entry -> entry.getKey() == mealID && entry.getValue().getUserId() == userID);
-
+        if (repository.get(mealID).getUserId() == userID) {
+            return null != repository.remove(mealID);
+        }
+        return false;
     }
 
     @Override
     public List<Meal> getAll(int userID) {
+
         return repository.entrySet().
                 stream().filter(e -> e.getValue().getUserId() == userID)
                 .map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
                         collect(Collectors.toList());
     }
 
+    public List<Meal> getAllFilteredByDates(int userID, LocalDate startDate, LocalDate endDate) {
 
-    @Override
-    public List<Meal> getAll(int userID, LocalDate startDate, LocalDate endDate) {
+    return     getAll(userID).stream().filter(e -> DateTimeUtil.isBetweenDate(e.getDate(), startDate, endDate)).
+                sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
+                collect(Collectors.toList());
 
-        return repository.entrySet().
-                stream().filter(e -> e.getValue().getUserId() == userID)
-                .filter(e -> DateTimeUtil.isBetweenDate(e.getValue().getDate(), startDate, endDate)).
-                        map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
-                        collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Meal> getAll(int userID, LocalTime startTime, LocalTime endTime) {
-
-        return repository.entrySet().
-                stream().filter(e -> e.getValue().getUserId() == userID)
-                .filter(e -> DateTimeUtil.isBetween(e.getValue().getTime(), startTime, endTime)).
-                        map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
-                        collect(Collectors.toList());
+//        return repository.entrySet().
+//                stream().filter(e -> e.getValue().getUserId() == userID)
+//                .filter(e -> DateTimeUtil.isBetweenDate(e.getValue().getDate(), startDate, endDate)).
+//                        map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
+//                        collect(Collectors.toList());
     }
 }
-

@@ -33,10 +33,14 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
+    public void update(Meal meal, int userID) {
+        checkNotFoundWithId( repository.update(meal, userID), userID);
+    }
+
+    @Override
     public void delete(int id, int userID) throws NotFoundException {
 
         checkNotFoundWithId(repository.delete(id, userID), id);
-
     }
 
     @Override
@@ -44,20 +48,9 @@ public class MealServiceImpl implements MealService {
         return checkNotFoundWithId(repository.get(id, userID), id);
     }
 
-
     @Override
-    public void update(Meal meal, int userID) {
-        checkNotFoundWithId( repository.save(meal, userID), userID);
-    }
-
-    @Override
-    public List<Meal> getAll(int userID, LocalDate startDate, LocalDate endDate) {
-        return repository.getAll(userID, startDate,  endDate);
-    }
-
-    @Override
-    public List<Meal> getAll(int userID, LocalTime startTime, LocalTime endTime) {
-        return repository.getAll(userID, startTime,  endTime);
+    public List<Meal> getAllFilteredByDates(int userID, LocalDate startDate, LocalDate endDate) {
+        return repository.getAllFilteredByDates(userID, startDate,  endDate);
     }
 
     @Override

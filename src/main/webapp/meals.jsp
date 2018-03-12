@@ -49,12 +49,12 @@
 
         <dl>
             <dt>Start Time:</dt>
-            <dd><input type="time" name="starttime" required></dd>
+            <dd><input type="time" name="starttime"></dd>
         </dl>
 
         <dl>
             <dt>End Time:</dt>
-            <dd><input type="time" name="endtime" required></dd>
+            <dd><input type="time" name="endtime"></dd>
         </dl>
 
         <button type="submit">Filter by time</button>
