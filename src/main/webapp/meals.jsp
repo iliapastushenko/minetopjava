@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
-<%--<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>--%>
+
 <html>
 <head>
     <title>Meal list</title>
@@ -32,20 +32,13 @@
 
         <dl>
             <dt>StartDate:</dt>
-            <dd><input type="date" name="startdate" required></dd>
+            <dd><input type="date" name="startdate" ></dd>
         </dl>
 
         <dl>
             <dt>EndDate:</dt>
-            <dd><input type="date" name="enddate" required></dd>
+            <dd><input type="date" name="enddate" ></dd>
         </dl>
-
-        <button type="submit">Filter by dates</button>
-
-    </form>
-
-
-    <form method="get" action="meals">
 
         <dl>
             <dt>Start Time:</dt>
@@ -57,12 +50,11 @@
             <dd><input type="time" name="endtime"></dd>
         </dl>
 
-        <button type="submit">Filter by time</button>
+        <button type="submit">Apply a filter</button>
 
     </form>
 
-
-    <a href="meals">Refresh filters</a>
+    <a href="meals">Refresh filter</a>
 
 
     <table border="1" cellpadding="8" cellspacing="0">

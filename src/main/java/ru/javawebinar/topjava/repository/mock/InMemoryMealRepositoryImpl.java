@@ -1,14 +1,12 @@
 package ru.javawebinar.topjava.repository.mock;
 
 import org.springframework.stereotype.Repository;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,8 +21,6 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     {
         for (Meal meal : MealsUtil.MEALS) {
-            // For demonstration purposes only!
-            // I don't want to create "save" method without "userID because of laziness
             this.save(meal, meal.getUserId());
         }
     }
@@ -32,23 +28,24 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public Meal get(int mealID, int userID) {
         Meal meal = repository.get(mealID);
-        if (meal.getUserId() == userID) return meal;
+        if (meal != null && meal.getUserId() == userID) return meal;
         else return null;
     }
 
     @Override
     public Meal save(Meal meal, int userID) {
-
-        meal.setId(counter.incrementAndGet());
-        meal.setUserId(userID);
-        repository.put(meal.getId(), meal);
+        if (meal != null) {
+            meal.setId(counter.incrementAndGet());
+            meal.setUserId(userID);
+            repository.put(meal.getId(), meal);
+        }
         return meal;
     }
 
     @Override
     public Meal update(Meal meal, int userID) {
-
-        if (repository.get(meal.getId()).getUserId() == userID) {
+        if (meal != null && meal.getId() != null &&
+                repository.get(meal.getId()).getUserId() == userID) {
             meal.setUserId(userID);
             return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
         }
@@ -57,7 +54,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int mealID, int userID) {
-        if (repository.get(mealID).getUserId() == userID) {
+        Meal meal = repository.get(mealID);
+        if (meal != null && meal.getUserId() == userID) {
             return null != repository.remove(mealID);
         }
         return false;
@@ -65,23 +63,16 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userID) {
-
-        return repository.entrySet().
-                stream().filter(e -> e.getValue().getUserId() == userID)
-                .map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
+        return repository.values().stream().filter(e -> e.getUserId() == userID)
+                .sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
                         collect(Collectors.toList());
     }
 
+    @Override
     public List<Meal> getAllFilteredByDates(int userID, LocalDate startDate, LocalDate endDate) {
-
-    return     getAll(userID).stream().filter(e -> DateTimeUtil.isBetweenDate(e.getDate(), startDate, endDate)).
-                sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
-                collect(Collectors.toList());
-
-//        return repository.entrySet().
-//                stream().filter(e -> e.getValue().getUserId() == userID)
-//                .filter(e -> DateTimeUtil.isBetweenDate(e.getValue().getDate(), startDate, endDate)).
-//                        map(Map.Entry::getValue).sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
-//                        collect(Collectors.toList());
+        return repository.values().stream().filter(e -> e.getUserId() == userID)
+                .filter(e -> DateTimeUtil.isBetweenDate(e.getDate(), startDate, endDate))
+                .sorted(Collections.reverseOrder(Comparator.comparing(Meal::getDateTime))).
+                        collect(Collectors.toList());
     }
 }

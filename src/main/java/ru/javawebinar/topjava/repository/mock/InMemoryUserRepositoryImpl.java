@@ -47,9 +47,11 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Collection<User> getAll() {
+    public List<User> getAll() {
         log.info("getAllFilteredByDates");
-        return repository.values();
+        List<User> users = new ArrayList<>(repository.values());
+        users.sort(new User.UserComparator());
+        return users;
     }
 
     @Override

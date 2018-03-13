@@ -8,14 +8,11 @@ import java.util.List;
 public interface UserRepository {
     User save(User user);
 
-    // false if not found
-   User delete(int id);
+    User delete(int id);
 
-    // null if not found
     User get(int id);
 
-    // null if not found
     User getByEmail(String email);
 
-    Collection<User> getAll();
+    List<User> getAll();
 }

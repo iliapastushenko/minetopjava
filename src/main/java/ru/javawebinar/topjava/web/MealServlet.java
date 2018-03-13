@@ -79,56 +79,24 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
-                log.info("getAllFilteredByDates");
+                String startDate = request.getParameter("startdate");
+                String endDate = request.getParameter("enddate");
+                String startTime = request.getParameter("starttime");
+                String endTime = request.getParameter("endtime");
 
-                String startdate = request.getParameter("startdate");
-                String enddate = request.getParameter("enddate");
-
-                String starttime = request.getParameter("starttime");
-                String endtime = request.getParameter("endtime");
-
-                if (startdate == null && enddate == null
-                        && starttime == null && endtime == null) {
-                    request.setAttribute("meals",
-                            MealsUtil.getWithExceeded(controller.getAll(),
-                                    MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                if (startDate == null && endDate == null && startTime == null && endTime == null) {
+                    log.info("getAll");
+                    request.setAttribute("meals", MealsUtil.getWithExceeded(controller.getAll(),
+                            MealsUtil.DEFAULT_CALORIES_PER_DAY));
                     request.getRequestDispatcher("/meals.jsp").forward(request, response);
                     break;
-                }
-
-                if (startdate != null && enddate != null) {
+                } else if (startDate != null && endDate != null && startTime != null && endTime != null) {
+                    log.info("getAllFilteredByDates");
                     request.setAttribute("meals",
-                            MealsUtil.getWithExceeded(controller.getAllFilteredByDates(LocalDate.parse(startdate), LocalDate.parse(enddate)),
-                                    MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                            MealsUtil.getFilteredWithExceeded(controller.getAllFilteredByDates(startDate, endDate),
+                                    MealsUtil.DEFAULT_CALORIES_PER_DAY, startTime, endTime));
                     request.getRequestDispatcher("/meals.jsp").forward(request, response);
                     break;
-                }
-                if (starttime != null && endtime != null)
-                {
-                    if ((!starttime.isEmpty()) && (!endtime.isEmpty())) {
-                        request.setAttribute("meals",
-                                MealsUtil.getFilteredWithExceeded(
-                                        controller.getAllFilteredByDates(LocalDate.MIN, LocalDate.MAX), MealsUtil.DEFAULT_CALORIES_PER_DAY,
-                                        LocalTime.parse(starttime), LocalTime.parse(endtime)));
-                        request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                        break;
-                    }
-                    if ((starttime.isEmpty()) && (!endtime.isEmpty())) {
-                        request.setAttribute("meals",
-                                MealsUtil.getFilteredWithExceeded(
-                                        controller.getAllFilteredByDates(LocalDate.MIN, LocalDate.MAX), MealsUtil.DEFAULT_CALORIES_PER_DAY,
-                                        LocalTime.MIN, LocalTime.parse(endtime)));
-                        request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                        break;
-                    }
-                    if (!starttime.isEmpty()) {
-                        request.setAttribute("meals",
-                                MealsUtil.getFilteredWithExceeded(
-                                        controller.getAllFilteredByDates(LocalDate.MIN, LocalDate.MAX), MealsUtil.DEFAULT_CALORIES_PER_DAY,
-                                        LocalTime.parse(starttime), LocalTime.MAX));
-                        request.getRequestDispatcher("/meals.jsp").forward(request, response);
-                        break;
-                    }
                 }
         }
     }
