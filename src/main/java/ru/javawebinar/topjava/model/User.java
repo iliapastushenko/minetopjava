@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
@@ -89,15 +88,5 @@ public class User extends AbstractNamedEntity {
                 ", roles=" + roles +
                 ", caloriesPerDay=" + caloriesPerDay +
                 ')';
-    }
-
-    public static class UserComparator implements Comparator<User> {
-        @Override
-        public int compare(User o1, User o2) {
-            if (o1.name.equals(o2.name)) {
-                return o1.getRegistered().compareTo(o2.registered);
-            }
-            return o1.name.compareTo(o2.name);
-        }
     }
 }
