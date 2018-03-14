@@ -7,10 +7,13 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.ValidationUtil;
 
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -22,24 +25,23 @@ public class MealRestController {
     @Autowired
     private MealService service;
 
-    public List<Meal> getAllFilteredByDates(String startDateString, String endDateForString) {
+    public List<MealWithExceed> getAllFilteredByDates(int calories, String startDate, String endDate, String startTime, String endTime) {
 
         log.info("getAllFilteredByDates");
 
-        LocalDate startLocalDate;
-        LocalDate endLocalDate;
+        LocalDate startLocalDate = startDate.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDate);
+        LocalDate endLocalDate = endDate.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDate);
+        LocalTime startLocalTime = startTime.isEmpty() ? LocalTime.MIN : LocalTime.parse(startTime);
+        LocalTime endLocalTime = endTime.isEmpty() ? LocalTime.MAX : LocalTime.parse(endTime);
 
-        if (startDateString.isEmpty()) startLocalDate = LocalDate.MIN;
-        else startLocalDate = LocalDate.parse(startDateString);
-        if (endDateForString.isEmpty()) endLocalDate = LocalDate.MAX;
-        else endLocalDate = LocalDate.parse(endDateForString);
-
-        return service.getAllFilteredByDates(AuthorizedUser.id(), startLocalDate, endLocalDate);
+        return MealsUtil.getFilteredWithExceeded(service.getAllFilteredByDates(AuthorizedUser.id(),
+                startLocalDate, endLocalDate), calories, startLocalTime, endLocalTime);
     }
 
-    public List<Meal> getAll() {
+    public List<MealWithExceed> getAll(int calories) {
         log.info("getAll");
-        return service.getAll(AuthorizedUser.id());
+
+        return MealsUtil.getWithExceeded(service.getAll(AuthorizedUser.id()), calories);
     }
 
     public Meal get(int id) {

@@ -99,11 +99,5 @@ public class User extends AbstractNamedEntity {
             }
             return o1.name.compareTo(o2.name);
         }
-
-        @Override
-        public boolean equals(Object obj) {
-            return false;
-        }
-
     }
 }

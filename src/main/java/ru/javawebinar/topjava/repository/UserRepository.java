@@ -2,13 +2,12 @@ package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.User;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface UserRepository {
     User save(User user);
 
-    User delete(int id);
+    Boolean delete(int id);
 
     User get(int id);
 

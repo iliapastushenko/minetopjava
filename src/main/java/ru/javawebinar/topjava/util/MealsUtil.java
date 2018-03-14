@@ -39,17 +39,8 @@ public class MealsUtil {
         return getFilteredWithExceeded(meals, caloriesPerDay, meal -> true);
     }
 
-    public static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, int caloriesPerDay, String startTime, String endTime) {
-
-        LocalTime startLocalTime;
-        LocalTime endLocalTime;
-
-        if (startTime.isEmpty()) startLocalTime = LocalTime.MIN;
-        else startLocalTime = LocalTime.parse(startTime);
-        if (endTime.isEmpty()) endLocalTime = LocalTime.MAX;
-        else endLocalTime = LocalTime.parse(endTime);
-
-        return getFilteredWithExceeded(meals, caloriesPerDay, meal -> DateTimeUtil.isBetween(meal.getTime(), startLocalTime, endLocalTime));
+    public static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, int caloriesPerDay, LocalTime startTime, LocalTime endTime) {
+        return getFilteredWithExceeded(meals, caloriesPerDay, meal -> DateTimeUtil.isBetween(meal.getTime(), startTime, endTime));
     }
 
     private static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, int caloriesPerDay, Predicate<Meal> filter) {

@@ -34,11 +34,11 @@ public class SpringMain {
             mealRestController.create(meal2);
             mealRestController.create(meal3);
             mealRestController.create(meal4);
-            System.out.println(mealRestController.getAll());
+            System.out.println(mealRestController.getAll(500));
             Meal meal5 = new Meal(LocalDateTime.of(2015, 3, 30,
                     10, 0), "НОВЫЙ ТЕСТОВЫЙ ЗАВТРАК", 700);
             mealRestController.update(meal5, meal1.getId());
-            System.out.println(mealRestController.getAll());
+            System.out.println(mealRestController.getAll(500));
 
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName5", "email", "password", Role.ROLE_ADMIN));
