@@ -5,14 +5,26 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Meal extends AbstractBaseEntity {
-    private  LocalDateTime dateTime;
+    private LocalDateTime dateTime;
 
-    private  String description;
+    private String description;
 
-    private  int calories;
+    private int calories;
+
+    public Meal() {
+
+    }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this(null, dateTime, description, calories);
+    }
+
+    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
+        super(id);
+        this.dateTime = dateTime;
+        this.description = description;
+        this.calories = calories;
+
     }
 
     public void setDateTime(LocalDateTime dateTime) {
@@ -25,18 +37,6 @@ public class Meal extends AbstractBaseEntity {
 
     public void setCalories(int calories) {
         this.calories = calories;
-    }
-
-    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
-        super(id);
-        this.dateTime = dateTime;
-        this.description = description;
-        this.calories = calories;
-
-    }
-
-    public Meal () {
-        System.out.println("I AM USING DEFAULT CONSTRUCTOR");
     }
 
     public LocalDateTime getDateTime() {
