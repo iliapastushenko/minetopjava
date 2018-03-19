@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava;
 
+import ru.javawebinar.topjava.Comparators.MealComparator;
 import ru.javawebinar.topjava.model.Meal;
 
 
@@ -27,35 +28,35 @@ public class MealTestData {
     public static final int USER_2_MEAL_6_ID = START_SEQ + 14;
 
     public static final Meal USER_1_MEAL_1 = new Meal(USER_1_MEAL_1_ID, LocalDateTime.of(2015,
-            05, 30, 10, 0), "Завтрак юзера 1", 500);
+            5, 30, 10, 0), "Завтрак юзера 1", 500);
     public static final Meal USER_1_MEAL_2 = new Meal(USER_1_MEAL_2_ID, LocalDateTime.of(2015,
-            05, 30, 13, 0), "Обед юзера 1", 1000);
+            5, 30, 13, 0), "Обед юзера 1", 1000);
     public static final Meal USER_1_MEAL_3 = new Meal(USER_1_MEAL_3_ID, LocalDateTime.of(2015,
-            05, 30, 20, 0), "Ужин юзера 1", 500);
+            5, 30, 20, 0), "Ужин юзера 1", 500);
     public static final Meal USER_1_MEAL_4 = new Meal(USER_1_MEAL_4_ID, LocalDateTime.of(2018,
-            05, 31, 10, 0), "Завтрак юзера 1", 500);
+            5, 31, 10, 0), "Завтрак юзера 1", 500);
     public static final Meal USER_1_MEAL_5 = new Meal(USER_1_MEAL_5_ID, LocalDateTime.of(2018,
-            05, 31, 13, 0), "Обед юзера 1", 1000);
+            5, 31, 13, 0), "Обед юзера 1", 1000);
     public static final Meal USER_1_MEAL_6 = new Meal(USER_1_MEAL_6_ID, LocalDateTime.of(2018,
-            05, 31, 20, 0), "Ужин юзера 1", 501);
+            5, 31, 20, 0), "Ужин юзера 1", 501);
 
 
     public static final Meal USER_2_MEAL_1 = new Meal(USER_2_MEAL_1_ID, LocalDateTime.of(2015,
-            05, 30, 10, 0), "Завтрак юзера 2", 500);
+            5, 30, 10, 0), "Завтрак юзера 2", 500);
     public static final Meal USER_2_MEAL_2 = new Meal(USER_2_MEAL_2_ID, LocalDateTime.of(2015,
-            05, 30, 13, 0), "Обед юзера 2", 1000);
+            5, 30, 13, 0), "Обед юзера 2", 1000);
     public static final Meal USER_2_MEAL_3 = new Meal(USER_2_MEAL_3_ID, LocalDateTime.of(2015,
-            05, 30, 20, 0), "Ужин юзера 2", 500);
+            5, 30, 20, 0), "Ужин юзера 2", 500);
     public static final Meal USER_2_MEAL_4 = new Meal(USER_2_MEAL_4_ID, LocalDateTime.of(2018,
-            05, 31, 10, 0), "Завтрак юзера 2", 500);
+            5, 31, 10, 0), "Завтрак юзера 2", 500);
     public static final Meal USER_2_MEAL_5 = new Meal(USER_2_MEAL_5_ID, LocalDateTime.of(2018,
-            05, 31, 13, 0), "Обед юзера 2", 1000);
+            5, 31, 13, 0), "Обед юзера 2", 1000);
     public static final Meal USER_2_MEAL_6 = new Meal(USER_2_MEAL_6_ID, LocalDateTime.of(2018,
-            05, 31, 20, 0), "Ужин юзера 2", 501);
+            5, 31, 20, 0), "Ужин юзера 2", 501);
 
 
     public static void assertMatch(Meal actual, Meal expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected);
+        assertThat(actual).usingComparator(new MealComparator()).isEqualTo(expected);
     }
 
     public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
@@ -63,6 +64,6 @@ public class MealTestData {
     }
 
     public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
     }
 }

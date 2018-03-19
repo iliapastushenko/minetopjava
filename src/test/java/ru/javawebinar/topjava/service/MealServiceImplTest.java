@@ -43,8 +43,8 @@ public class MealServiceImplTest {
         Meal created = service.create(newMeal, USER_1_ID);
         newMeal.setId(created.getId());
         assertMatch(service.getAll(USER_1_ID),
-                USER_1_MEAL_1, USER_1_MEAL_2, USER_1_MEAL_3, newMeal,
-                USER_1_MEAL_4, USER_1_MEAL_5, USER_1_MEAL_6
+                USER_1_MEAL_6, USER_1_MEAL_5, USER_1_MEAL_4, newMeal,
+                USER_1_MEAL_3, USER_1_MEAL_2, USER_1_MEAL_1
         );
     }
 
@@ -61,7 +61,7 @@ public class MealServiceImplTest {
     public void delete() {
         service.delete(USER_1_MEAL_1_ID, USER_1_ID);
         assertMatch(service.getAll(USER_1_ID),
-                USER_1_MEAL_2, USER_1_MEAL_3, USER_1_MEAL_4, USER_1_MEAL_5, USER_1_MEAL_6);
+                USER_1_MEAL_6, USER_1_MEAL_5, USER_1_MEAL_4, USER_1_MEAL_3, USER_1_MEAL_2);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class MealServiceImplTest {
     @Test
     public void getAll() {
         assertMatch(service.getAll(USER_1_ID),
-                USER_1_MEAL_1, USER_1_MEAL_2, USER_1_MEAL_3, USER_1_MEAL_4, USER_1_MEAL_5, USER_1_MEAL_6
+                USER_1_MEAL_6, USER_1_MEAL_5, USER_1_MEAL_4, USER_1_MEAL_3, USER_1_MEAL_2, USER_1_MEAL_1
         );
     }
 
@@ -83,7 +83,7 @@ public class MealServiceImplTest {
                 LocalDateTime.of(2014, Month.MAY, 30, 10, 0),
                 LocalDateTime.of(2016, Month.MAY, 30, 10, 0),
                 USER_1_ID);
-        assertMatch(meals, USER_1_MEAL_1, USER_1_MEAL_2, USER_1_MEAL_3);
+        assertMatch(meals, USER_1_MEAL_3, USER_1_MEAL_2, USER_1_MEAL_1);
     }
 
     @Test(expected = NotFoundException.class)

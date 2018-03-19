@@ -7,22 +7,21 @@ import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-import ru.javawebinar.topjava.web.user.AdminRestController;
 
-import java.util.Arrays;
 import java.util.Collection;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
 
 public class InMemoryAdminRestControllerTest {
+
     private static ConfigurableApplicationContext appCtx;
-    private static AdminRestController controller;
+    private static InMemoryUserRepositoryImpl repository;
 
     @BeforeClass
     public static void beforeClass() {
-        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
-        System.out.println("\n" + Arrays.toString(appCtx.getBeanDefinitionNames()) + "\n");
-        controller = appCtx.getBean(AdminRestController.class);
+        appCtx = new ClassPathXmlApplicationContext("spring-test.xml");
+        repository = appCtx.getBean(InMemoryUserRepositoryImpl.class);
     }
 
     @AfterClass
@@ -39,14 +38,14 @@ public class InMemoryAdminRestControllerTest {
 
     @Test
     public void testDelete() throws Exception {
-        controller.delete(UserTestData.USER_1_ID);
-        Collection<User> users = controller.getAll();
+        repository.delete(UserTestData.USER_1_ID);
+        Collection<User> users = repository.getAll();
         Assert.assertEquals(users.size(), 1);
-        Assert.assertEquals(users.iterator().next(), ADMIN);
+        assertThat(users.iterator().next()).isEqualToIgnoringGivenFields(ADMIN, "registered", "roles");
     }
 
     @Test(expected = NotFoundException.class)
     public void testDeleteNotFound() throws Exception {
-        controller.delete(10);
+        if (!repository.delete(10)) throw new NotFoundException("Not found");
     }
 }
