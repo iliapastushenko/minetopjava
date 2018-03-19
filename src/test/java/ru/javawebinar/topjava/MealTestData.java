@@ -1,6 +1,6 @@
 package ru.javawebinar.topjava;
 
-import ru.javawebinar.topjava.Comparators.MealComparator;
+
 import ru.javawebinar.topjava.model.Meal;
 
 
@@ -56,7 +56,7 @@ public class MealTestData {
 
 
     public static void assertMatch(Meal actual, Meal expected) {
-        assertThat(actual).usingComparator(new MealComparator()).isEqualTo(expected);
+        assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
     public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
