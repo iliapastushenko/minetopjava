@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @Transactional(readOnly = true)
@@ -22,10 +23,9 @@ public class JpaMealRepositoryImpl implements MealRepository {
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
-
-        if (meal == null) return null;
-        if (!meal.isNew()) {
-            if (get(meal.getId(), userId) == null) return null;
+        Objects.requireNonNull(meal);
+        if (!meal.isNew() && get(meal.getId(), userId) == null) {
+            return null;
         }
         meal.setUser(em.getReference(User.class, userId));
         if (meal.isNew()) {
@@ -39,8 +39,7 @@ public class JpaMealRepositoryImpl implements MealRepository {
     @Override
     public Meal get(int id, int userId) {
         Meal meal = em.find(Meal.class, id);
-        if (meal == null) return null;
-        if (meal.getUser().getId() == userId) return meal;
+        if (meal != null && meal.getUser().getId() == userId) return meal;
         else return null;
     }
 
@@ -48,7 +47,7 @@ public class JpaMealRepositoryImpl implements MealRepository {
     @Override
     @Transactional
     public boolean delete(int id, int userId) {
-      return em.createNamedQuery(Meal.DELETE)
+        return em.createNamedQuery(Meal.DELETE)
                 .setParameter("mealId", id).setParameter("userId", userId)
                 .executeUpdate() != 0;
     }
