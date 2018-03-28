@@ -1,8 +1,11 @@
 package ru.javawebinar.topjava.to;
 
+import ru.javawebinar.topjava.model.AbstractBaseEntity;
+
 import java.time.LocalDateTime;
 
 public class MealWithExceed {
+
     private final Integer id;
 
     private final LocalDateTime dateTime;

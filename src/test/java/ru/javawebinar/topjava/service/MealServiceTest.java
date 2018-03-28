@@ -10,15 +10,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ru.javawebinar.topjava.MyJUnitStopWatch;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import javax.transaction.Transactional;
+
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.List;
 
-import static java.time.LocalDateTime.of;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -38,6 +37,9 @@ public class MealServiceTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+    @Rule
+    public MyJUnitStopWatch stopwatch = new MyJUnitStopWatch();
+
     @Autowired
     private MealService service;
 
@@ -54,13 +56,6 @@ public class MealServiceTest {
     }
 
     @Test
-    public void saveThousand() throws Exception {
-        for (int i =0; i<1_000;i++ ) {
-        service.create(new Meal(null, of(i, Month.JUNE, 1, 18, 0), "Созданный ужин", 300), USER_ID); }
-
-    }
-
-    @Test
     public void save() throws Exception {
         Meal created = getCreated();
         service.create(created, USER_ID);
@@ -73,8 +68,9 @@ public class MealServiceTest {
         assertMatch(actual, ADMIN_MEAL1);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.get(MEAL1_ID, ADMIN_ID);
     }
 
