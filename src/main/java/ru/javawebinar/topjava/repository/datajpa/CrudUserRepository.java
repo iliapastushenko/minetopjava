@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface CrudUserRepository extends JpaRepository<User, Integer> {
+
     @Transactional
     @Modifying
 //    @Query(name = User.DELETE)
@@ -30,4 +31,7 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     List<User> findAll(Sort sort);
 
     User getByEmail(String email);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.meals JOIN FETCH u.roles WHERE u.id = :id")
+    User getUserWithMeals(@Param("id") int id);
 }

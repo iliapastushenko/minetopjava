@@ -12,17 +12,20 @@ import java.util.Objects;
 @Repository
 public class DataJpaMealRepositoryImpl implements MealRepository {
 
-
     @Autowired
     private CrudMealRepository crudMealRepository;
 
     @Autowired
     private CrudUserRepository crudUserRepository;
 
-
     @Override
     public Meal get(int id, int userId) {
         return crudMealRepository.getByMealAndUserId(id, userId);
+    }
+
+    @Override
+    public Meal getMealWithUser(int id, int userId) {
+        return crudMealRepository.getMealWithUser(id,userId);
     }
 
     @Override

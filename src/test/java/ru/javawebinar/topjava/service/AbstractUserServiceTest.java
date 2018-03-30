@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+
 import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -73,7 +74,7 @@ abstract public class AbstractUserServiceTest {
     }
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     @Autowired
     private CacheManager cacheManager;
@@ -85,10 +86,10 @@ abstract public class AbstractUserServiceTest {
 
     @Test
     public void create() throws Exception {
-        User newUser = new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.ROLE_USER));
+        User newUser = new User(null, "New", "new123@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.ROLE_USER), null);
         User created = service.create(newUser);
         newUser.setId(created.getId());
-        assertMatch(service.getAll(), ADMIN, newUser, USER);
+        assertMatch(service.getAll(), ADMIN, newUser, USER, USER_WITHOUT_MEALS);
     }
 
     @Test
@@ -100,7 +101,7 @@ abstract public class AbstractUserServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        assertMatch(service.getAll(), ADMIN);
+        assertMatch(service.getAll(), ADMIN, USER_WITHOUT_MEALS);
     }
 
     @Test
@@ -139,6 +140,6 @@ abstract public class AbstractUserServiceTest {
     @Test
     public void getAll() throws Exception {
         List<User> all = service.getAll();
-        assertMatch(all, ADMIN, USER);
+        assertMatch(all, ADMIN, USER, USER_WITHOUT_MEALS);
     }
 }

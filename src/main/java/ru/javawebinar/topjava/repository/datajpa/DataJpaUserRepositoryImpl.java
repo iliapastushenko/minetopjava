@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import java.util.List;
 
+
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepository {
 
@@ -39,5 +40,10 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         return crudRepository.findAll(SORT_NAME_EMAIL);
+    }
+
+    @Override
+    public User getUserWithMeals(int id) {
+        return crudRepository.getUserWithMeals(id);
     }
 }
