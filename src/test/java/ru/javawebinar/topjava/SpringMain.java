@@ -15,23 +15,23 @@ import java.util.List;
 
 public class SpringMain {
     public static void main(String[] args) {
+        try (GenericXmlApplicationContext appCtx = new GenericXmlApplicationContext()) {
 
-        GenericXmlApplicationContext appCtx = new GenericXmlApplicationContext();
-        appCtx.getEnvironment().setActiveProfiles("common_jpa", "jpa", "postgres");
-        appCtx.load("spring/spring-app.xml", "spring/spring-db.xml");
-        appCtx.refresh();
+            appCtx.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile(), Profiles.REPOSITORY_IMPLEMENTATION);
+            appCtx.load("spring/spring-app.xml", "spring/spring-db.xml");
+            appCtx.refresh();
 
-        System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
-        AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-        adminUserController.create(new User(null, "userName", "userName@yandex.ru", "password", Role.ROLE_ADMIN));
-        System.out.println();
+            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
+            AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
+            adminUserController.create(new User(null, "userName", "userName@yandex.ru", "password", Role.ROLE_ADMIN));
+            System.out.println();
 
-        MealRestController mealController = appCtx.getBean(MealRestController.class);
-        List<MealWithExceed> filteredMealsWithExceeded =
-                mealController.getBetween(
-                        LocalDate.of(2015, Month.MAY, 30), LocalTime.of(7, 0),
-                        LocalDate.of(2015, Month.MAY, 31), LocalTime.of(11, 0));
-        filteredMealsWithExceeded.forEach(System.out::println);
-        appCtx.close();
+            MealRestController mealController = appCtx.getBean(MealRestController.class);
+            List<MealWithExceed> filteredMealsWithExceeded =
+                    mealController.getBetween(
+                            LocalDate.of(2015, Month.MAY, 30), LocalTime.of(7, 0),
+                            LocalDate.of(2015, Month.MAY, 31), LocalTime.of(11, 0));
+            filteredMealsWithExceeded.forEach(System.out::println);
+        }
     }
 }

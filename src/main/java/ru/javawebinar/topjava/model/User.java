@@ -50,6 +50,7 @@ public class User extends AbstractNamedEntity {
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OrderBy("dateTime DESC")
     private List<Meal> meals;
 
     @Column(name = "calories_per_day", columnDefinition = "int default 2000")

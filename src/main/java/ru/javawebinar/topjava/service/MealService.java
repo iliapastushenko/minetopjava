@@ -25,7 +25,5 @@ public interface MealService {
 
     Meal create(Meal meal, int userId);
 
-    default Meal getMealWithUser(int id, int userId) {
-        return null;
-    }
+    Meal getMealWithUser(int id, int userId);
 }

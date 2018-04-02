@@ -10,12 +10,14 @@ import java.util.Collections;
 
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@ActiveProfiles({"common_jpa", "datajpa"})
+@ActiveProfiles("datajpa")
 public class DataJpaUserServiceTest extends AbstractUserServiceTest {
 
     @Test
     public void getUserAndMeals() throws Exception {
         User user = service.getUserWithMeals(USER_ID);
+        System.out.println(user.getMeals());
+        System.out.println(USER_WITH_MEALS.getMeals());
         MealTestData.assertMatch(user.getMeals(),USER_WITH_MEALS.getMeals());
         assertMatch(user, USER_WITH_MEALS);
     }
