@@ -57,14 +57,6 @@ public class User extends AbstractNamedEntity {
     @Range(min = 10, max = 10000)
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
-    public List<Meal> getMeals() {
-        return meals;
-    }
-
-    public void setMeals(List<Meal> meals) {
-        this.meals = meals;
-    }
-
     public User() {
     }
 
@@ -84,7 +76,6 @@ public class User extends AbstractNamedEntity {
         setMeals(meals);
     }
 
-
     public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Date registered,
                 Collection<Role> roles, List<Meal> meals) {
         super(id, name);
@@ -95,6 +86,14 @@ public class User extends AbstractNamedEntity {
         this.registered = registered;
         setRoles(roles);
         setMeals(meals);
+    }
+
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
     }
 
     public String getEmail() {
