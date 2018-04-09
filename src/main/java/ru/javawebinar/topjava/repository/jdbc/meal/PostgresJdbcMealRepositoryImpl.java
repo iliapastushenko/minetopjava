@@ -6,11 +6,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Repository
 @Profile("postgres")
-public class PostgresJdbcMealRepositoryImpl extends AbstractJdbcMealRepositoryImpl {
+public class PostgresJdbcMealRepositoryImpl extends AbstractJdbcMealRepositoryImpl<LocalDateTime> {
 
     public PostgresJdbcMealRepositoryImpl(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(dataSource, jdbcTemplate, namedParameterJdbcTemplate);
