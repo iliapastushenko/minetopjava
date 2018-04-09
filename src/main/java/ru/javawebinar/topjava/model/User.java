@@ -61,19 +61,18 @@ public class User extends AbstractNamedEntity {
     }
 
     public User(User u) {
-        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getCaloriesPerDay(), u.isEnabled(), u.getRegistered(), u.getRoles(),u.getMeals());
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getCaloriesPerDay(), u.isEnabled(), u.getRegistered(), u.getRoles(), u.getMeals());
     }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
-        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), EnumSet.of(role, roles),null);
+        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), EnumSet.of(role, roles), null);
     }
 
-    public User(Integer id, String name, String email, String password,Role role, List<Meal> meals) {
+    public User(Integer id, String name, String email, String password, Role role, List<Meal> meals) {
         super(id, name);
         this.email = email;
         this.password = password;
-        setRoles( EnumSet.of(role));
-        setMeals(meals);
+        setRoles(EnumSet.of(role));
     }
 
     public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Date registered,
@@ -85,15 +84,10 @@ public class User extends AbstractNamedEntity {
         this.enabled = enabled;
         this.registered = registered;
         setRoles(roles);
-        setMeals(meals);
     }
 
     public List<Meal> getMeals() {
         return meals;
-    }
-
-    public void setMeals(List<Meal> meals) {
-        this.meals = meals;
     }
 
     public String getEmail() {
