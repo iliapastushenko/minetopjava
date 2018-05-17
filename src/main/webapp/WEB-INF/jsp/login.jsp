@@ -53,7 +53,7 @@
 <div class="container">
     <div class="lead">
         &nbsp;&nbsp;&nbsp;<a href="https://github.com/iliapastushenko"> Мой </a> демонстрационный Java Enterprise проект с
-        регистрацией/авторизацией и интерфейсом на основе ролей (USER, ADMIN) в рамках <a href="http://javaops.ru/certificate?email=ilya.pastushenko@bk.ru> стажировки </a>.
+        регистрацией/авторизацией и интерфейсом на основе ролей (USER, ADMIN) в рамках<a href="http://javaops.ru/certificate?email=ilya.pastushenko@bk.ru"> стажировки </a>.
         Администратор может создавать/редактировать/удалять пользователей, а пользователи - управлять своим
         профилем и данными (день, еда, калории) через UI (по AJAX) и по REST интерфейсу с базовой авторизацией.
         Возможна фильтрация данных по датам и времени, при этом цвет записи таблицы еды зависит от того, превышает ли
